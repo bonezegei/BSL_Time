@@ -1,0 +1,56 @@
+include("lib/time.bzg");
+
+// Instantiate the native time library constructor
+var t = time();
+
+t.setTimeZone(8.0);
+
+print("=== BSL Time Library Demo ===");
+
+// 1. Get Current Timestamp (Seconds & Milliseconds)
+var now_sec = t.now();
+var now_ms = t.nowMS();
+print("Current Epoch (Seconds): " + now_sec);
+print("Current Epoch (MS): " + now_ms);
+
+// 2. Format Timestamp with Timezone Offsets
+var utc_time = t.format(now_sec, "%Y-%m-%d %H:%M:%S", 0.0);
+var pht_time = t.format(now_sec, "%Y-%m-%d %H:%M:%S", 8.0);   // UTC+8 (e.g., PHT, SGT)
+var est_time = t.format(now_sec, "%Y-%m-%d %H:%M:%S", -5.0);  // UTC-5 (e.g., EST)
+
+print("UTC Time:   " + utc_time);
+print("UTC+8 Time: " + pht_time);
+print("UTC-5 Time: " + est_time);
+
+// 3. Extract Date/Time Component Object
+var parts = t.getParts(now_sec, 8.0);
+print("Year:   " + parts.year);
+print("Month:  " + parts.month);
+print("Day:    " + parts.day);
+print("Hour:   " + parts.hour);
+print("Minute: " + parts.minute);
+print("Second: " + parts.second);
+
+// 4. Parse Date String to Unix Timestamp
+var date_str = "2026-10-13 12:00:00";
+var parsed_ts = t.parse(date_str);
+print("Parsed Timestamp for '" + date_str + "': " + parsed_ts);
+
+// 5. Measure Elapsed Time with Sleep
+var start_time = t.now();
+print("Sleeping for 1.5 seconds...");
+t.sleep(1.5);
+var end_time = t.now();
+
+var elapsed = t.diff(end_time, start_time);
+print("Elapsed time: " + elapsed + " seconds");
+
+// 6. Countdown Loop with Sleep Utility
+print("--- Countdown Demo ---");
+
+for (var i = 3; i > 0; i--) {
+    print("Countdown: " + i);
+    t.sleep(0.5);
+}
+
+print("Done!");
